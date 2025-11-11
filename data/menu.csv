@@ -1,0 +1,13 @@
+id,name,category,cuisine,tags,calories,price,image,prep_time_minutes,popularity_score,description
+1,Spicy Burger,Main,American,"spicy,beef,comfort",820,9.99,images/spicy_burger.jpg,15,85,"Juicy beef patty with spicy sauce and crispy onions."
+2,Paneer Wrap,Main,Indian,"vegetarian,wrap,cheesy",450,7.99,images/paneer_wrap.jpg,10,70,"Grilled paneer with fresh veggies and mint chutney."
+3,Chicken Caesar Salad,Salad,Italian,"chicken,salad,healthy",400,8.50,images/caesar_salad.jpg,8,75,"Crisp romaine with grilled chicken and parmesan shards."
+4,Vegetable Fried Rice,Main,Asian,"vegetarian,vegan,comfort",520,6.50,images/fried_rice.jpg,12,78,"Stir-fried rice with mixed vegetables and light soy glaze."
+5,Margherita Pizza,Main,Italian,"vegetarian,cheesy,shareable",700,11.00,images/margherita_pizza.jpg,18,90,"Classic tomato, basil, and melted mozzarella."
+6,Grilled Salmon Bowl,Main,Seafood,"salmon,healthy,protein",520,12.50,images/salmon_bowl.jpg,14,65,"Seared salmon over quinoa and greens with lemon dressing."
+7,Veggie Burger,Main,American,"vegetarian,vegan,burger",590,9.25,images/veggie_burger.jpg,15,68,"Plant-based patty, avocado, and house sauce."
+8,Beef Tacos,Main,Mexican,"spicy,beef,tacos",480,8.00,images/beef_tacos.jpg,10,80,"Soft tacos with spiced beef, cilantro, and lime."
+9,Tom Yum Soup,Main,Thai,"spicy,soup,seafood",220,6.75,images/tom_yum.jpg,9,60,"Hot and sour soup with lemongrass and shrimp."
+10,Chicken Shawarma,Main,MiddleEastern,"chicken,wrap,spicy",650,9.50,images/shawarma.jpg,12,82,"Rotisserie-style chicken with garlic sauce in pita."
+11,Avocado Toast,Snack,Cafe,"vegetarian,breakfast,healthy",320,6.00,images/avocado_toast.jpg,6,55,"Smashed avocado on toasted sourdough with chili flakes."
+12,Chocolate Brownie,Dessert,Cafe,"sweet,shareable,comfort",420,4.50,images/brownie.jpg,8,88,"Warm fudgy brownie served with a scoop of vanilla ice cream."
