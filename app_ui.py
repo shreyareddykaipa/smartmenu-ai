@@ -9,7 +9,6 @@ from app.db import init_db
 
 init_db()
 
-
 st.set_page_config(page_title="SmartMenu AI", page_icon="🍔", layout="centered")
 st.title("🍔 SmartMenu AI")
 
@@ -35,37 +34,33 @@ max_items = st.number_input(
     step=1
 )
 
-
+# ----------------------------- MAIN BUTTON -----------------------------
 if st.button("Get Recommendations"):
     try:
-        recs_df = recommend_by_mood(menu, mood)  # your recommender
-        recs = pd.DataFrame(recs_df)  # convert if needed
+        recs_df = recommend_by_mood(menu, mood)  
+        recs = pd.DataFrame(recs_df)
 
         if recs.empty:
             st.info("No recommendations found. Showing top popular items instead.")
             recs = menu.sort_values("popularity_score", ascending=False)
 
-        # Apply user-selected number of recommendations
         recs = recs.head(max_items)
 
-        # --- INSERT DB LOGGING HERE ---
+        # --- DB LOGGING ---
         from app.db import get_connection
-
         conn = get_connection()
         cur = conn.cursor()
         for dish_id in recs['id'].tolist():
-            cur.execute(
-                "INSERT INTO user_history (mood, dish_id) VALUES (?, ?)",
-                (mood, dish_id)
-            )
+            cur.execute("INSERT INTO user_history (mood, dish_id) VALUES (?, ?)", (mood, dish_id))
         conn.commit()
         conn.close()
-        # --- DB LOGGING END ---
+        # --- END LOGGING ---
 
-        # Display recommendations with images
+        # -------- DISPLAY EACH RECOMMENDATION ----------
         for _, row in recs.iterrows():
-            st.markdown(f"### {row['name']}  —  {row.get('category', '')}  —  ${row['price']}")
+            st.markdown(f"### {row['name']} — {row.get('category','')} — ${row['price']}")
             st.write(row.get("description", ""))
+
             img_path = row.get("image", "")
             if img_path and os.path.exists(img_path):
                 try:
@@ -75,18 +70,22 @@ if st.button("Get Recommendations"):
             else:
                 st.text("[Image not available]")
 
-       
+            # ---- AI Explanation (Groq) ----
+            with st.expander("Why AI recommends this dish? 🤖", expanded=False):
+                try:
+                    ai = SmartMenuAI()
+                    top_names = recs['name'].tolist()
+                    prompt = (
+                        f"The user feels {mood}. From these dishes {top_names}, "
+                        "recommend one and explain in 2 concise sentences why it suits this mood."
+                    )
+                    explanation = ai.generate_response(prompt)
+                    st.write(explanation)
+                except RuntimeError as e:
+                    st.info("AI explanation is disabled in this environment.")
+                    st.caption(str(e))
+                except Exception as e:
+                    st.warning(f"AI explanation unavailable: {e}")
 
-        # AI explanation (optional)
-      from groq import Groq
-
-class SmartMenuAI:
-    def __init__(self):
-        self.client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
-
-    def generate_response(self, prompt):
-        response = self.client.chat.completions.create(
-            model="llama3-8b-8192",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return response.choices[0].message.content.strip()
+    except Exception as e:
+        st.error(f"Error during recommendations: {e}")
