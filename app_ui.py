@@ -78,17 +78,15 @@ if st.button("Get Recommendations"):
        
 
         # AI explanation (optional)
-        try:
-            model_folder = r"C:/Users/shrey/AppData/Local/nomic.ai/GPT4All"
-            model_file = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
-            ai = SmartMenuAI(model_path=os.path.join(model_folder, model_file))
-            top_names = recs['name'].tolist()
-            prompt = f"The user feels {mood}. From these dishes {top_names}, recommend one and explain in 2 sentences why it suits this mood."
-            explanation = ai.generate_response(prompt)
-            st.subheader("AI Explanation")
-            st.write(explanation)
-        except Exception as e:
-            st.warning(f"AI explanation unavailable: {e}")
+      from groq import Groq
 
-    except Exception as e:
-        st.error(f"Error during recommendations: {e}")
+class SmartMenuAI:
+    def __init__(self):
+        self.client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+    def generate_response(self, prompt):
+        response = self.client.chat.completions.create(
+            model="llama3-8b-8192",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content.strip()
