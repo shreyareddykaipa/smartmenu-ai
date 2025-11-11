@@ -54,5 +54,7 @@ tzdata==2025.2
 urllib3==2.5.0
 watchdog==6.0.0
 groq==0.13.0
+groq>=0.33.0
+
 
 
