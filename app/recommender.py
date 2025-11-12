@@ -2,13 +2,13 @@ import random
 
 def recommend_by_mood(menu_df, mood):
     suggestions = []
-
     mood_keywords = {
-        "happy": ["burger", "wrap", "pizza"],
-        "sad": ["brownie", "salad", "soup"],
-        "tired": ["bowl", "fried rice"],
-        "excited": ["tacos", "spicy"],
-        "stress": ["tea", "soup", "salad"]
+    "happy": ["burger", "wrap", "pizza"],
+    "sad": ["brownie", "salad", "soup"],
+    "tired": ["bowl", "fried rice"],
+    "excited": ["tacos", "spicy"],
+    "stressed": ["tea", "soup", "salad"],
+
     }
 
     mood = mood.lower()
