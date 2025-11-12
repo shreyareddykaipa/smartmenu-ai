@@ -84,7 +84,8 @@ if st.button("Get Recommendations"):
                     st.text("[Could not load image]")
             else:
                 st.text("[Image not available]")
-
+                
+        
             # ---- AI Explanation (Groq) ----
             with st.expander("Why AI recommends this dish? 🤖", expanded=False):
                 if ai_client is None:
@@ -103,3 +104,4 @@ if st.button("Get Recommendations"):
                         st.write(explanation)
                     except Exception as e:
                         st.warning(f"AI explanation unavailable: {e}")
+
