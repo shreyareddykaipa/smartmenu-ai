@@ -20,7 +20,7 @@ except Exception as e:
     st.error(f"Error loading CSV: {e}")
     st.stop()
 
-# show small preview
+# Show small preview
 st.write("Full Menu:")
 st.dataframe(menu)
 
@@ -34,19 +34,17 @@ max_items = st.number_input(
     step=1
 )
 
-# Create AI client once (safe even if secrets are missing; we’ll catch it later)
+# Create AI client once (safe even if secrets are missing)
 ai_client = None
 try:
-    ai_client = SmartMenuAI(model="llama-3.1-8b-instant")  # or "llama-3.3-70b-versatile"
+    ai_client = SmartMenuAI(model="llama-3.3-70b-versatile")  # Updated active model
 except Exception as _e:
-    # We'll show a friendly message later in the expander if it's not configured
     ai_client = None
-
 
 # ----------------------------- MAIN BUTTON -----------------------------
 if st.button("Get Recommendations"):
     try:
-        recs_df = recommend_by_mood(menu, mood)  
+        recs_df = recommend_by_mood(menu, mood)
         recs = pd.DataFrame(recs_df)
 
         if recs.empty:
@@ -94,3 +92,6 @@ if st.button("Get Recommendations"):
                         st.write(explanation)
                     except Exception as e:
                         st.warning(f"AI explanation unavailable: {e}")
+
+    except Exception as e:
+        st.error(f"Error during recommendations: {e}")
