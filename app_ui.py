@@ -34,6 +34,11 @@ max_items = st.number_input(
     step=1
 )
 
+
+import os
+st.write("Debug: GROQ_API_KEY detected?", bool(os.environ.get("GROQ_API_KEY")))
+
+
 # Create AI client once (safe even if secrets are missing)
 ai_client = None
 try:
