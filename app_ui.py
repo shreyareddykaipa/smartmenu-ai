@@ -80,12 +80,11 @@ if st.button("Get Recommendations"):
             if img_path and os.path.exists(img_path):
                 try:
                     st.image(Image.open(img_path), width=300)
-                except:
+                except Exception:
                     st.text("[Could not load image]")
             else:
                 st.text("[Image not available]")
-                
-        
+
             # ---- AI Explanation (Groq) ----
             with st.expander("Why AI recommends this dish? 🤖", expanded=False):
                 if ai_client is None:
@@ -104,4 +103,7 @@ if st.button("Get Recommendations"):
                         st.write(explanation)
                     except Exception as e:
                         st.warning(f"AI explanation unavailable: {e}")
+
+    except Exception as e:
+        st.error(f"Error during recommendations: {e}")
 
