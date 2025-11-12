@@ -86,19 +86,20 @@ if st.button("Get Recommendations"):
                 st.text("[Image not available]")
 
             # ---- AI Explanation (Groq) ----
-    with st.expander("Why AI recommends this dish? 🤖", expanded=False):
-        if ai_client is None:
-            msg = "AI explanation is disabled"
-            if ai_init_error:
-                msg += f" — {ai_init_error}"
-            st.info(msg)
-        else:
-            try:
-                top_names = recs['name'].tolist()
-                prompt = (
-                    f"The user feels {mood}. From these dishes {top_names}, "
-                    "recommend one and explain in 2 concise sentences why it suits this mood."
-                )
-                st.write(ai_client.generate_response(prompt))
-            except Exception as e:
-                st.warning(f"AI explanation unavailable: {e}")
+            with st.expander("Why AI recommends this dish? 🤖", expanded=False):
+                if ai_client is None:
+                    msg = "AI explanation is disabled"
+                    if ai_init_error:
+                        msg += f" — {ai_init_error}"
+                    st.info(msg)
+                else:
+                    try:
+                        top_names = recs['name'].tolist()
+                        prompt = (
+                            f"The user feels {mood}. From these dishes {top_names}, "
+                            "recommend one and explain in 2 concise sentences why it suits this mood."
+                        )
+                        explanation = ai_client.generate_response(prompt)
+                        st.write(explanation)
+                    except Exception as e:
+                        st.warning(f"AI explanation unavailable: {e}")
