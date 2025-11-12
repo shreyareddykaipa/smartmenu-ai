@@ -38,13 +38,16 @@ max_items = st.number_input(
 import os
 st.write("Debug: GROQ_API_KEY detected?", bool(os.environ.get("GROQ_API_KEY")))
 
-
-# Create AI client once (safe even if secrets are missing)
+# Create AI client once (safe even if secrets are missing; we’ll show any error)
 ai_client = None
+ai_init_error = None
 try:
-    ai_client = SmartMenuAI(model="llama-3.3-70b-versatile")  # Updated active model
-except Exception as _e:
+    # Pick one:
+    ai_client = SmartMenuAI(model="llama-3.1-70b-versatile")
+except Exception as e:
+    ai_init_error = str(e)
     ai_client = None
+
 
 # ----------------------------- MAIN BUTTON -----------------------------
 if st.button("Get Recommendations"):
@@ -83,20 +86,19 @@ if st.button("Get Recommendations"):
                 st.text("[Image not available]")
 
             # ---- AI Explanation (Groq) ----
-            with st.expander("Why AI recommends this dish? 🤖", expanded=False):
-                if ai_client is None:
-                    st.info("AI explanation is disabled (GROQ_API_KEY not configured or model unavailable).")
-                else:
-                    try:
-                        top_names = recs['name'].tolist()
-                        prompt = (
-                            f"The user feels {mood}. From these dishes {top_names}, "
-                            "recommend one and explain in 2 concise sentences why it suits this mood."
-                        )
-                        explanation = ai_client.generate_response(prompt)
-                        st.write(explanation)
-                    except Exception as e:
-                        st.warning(f"AI explanation unavailable: {e}")
-
-    except Exception as e:
-        st.error(f"Error during recommendations: {e}")
+    with st.expander("Why AI recommends this dish? 🤖", expanded=False):
+        if ai_client is None:
+            msg = "AI explanation is disabled"
+            if ai_init_error:
+                msg += f" — {ai_init_error}"
+            st.info(msg)
+        else:
+            try:
+                top_names = recs['name'].tolist()
+                prompt = (
+                    f"The user feels {mood}. From these dishes {top_names}, "
+                    "recommend one and explain in 2 concise sentences why it suits this mood."
+                )
+                st.write(ai_client.generate_response(prompt))
+            except Exception as e:
+                st.warning(f"AI explanation unavailable: {e}")
